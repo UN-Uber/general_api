@@ -14,12 +14,12 @@ type Driver {
 }
 
 input DriverInput {
-    firstName : String
-    lastName : String
-    vehicleModel : String
-    licensePlate : String
-    phoneNumber : String
-    email : String
+    firstName : String!
+    lastName : String!
+    vehicleModel : String!
+    licensePlate : String!
+    phoneNumber : String!
+    email : String!
 }
 
 type Query {
@@ -38,12 +38,17 @@ export const driverResolvers = {
         getDrivers: (_source, _args, { dataSources }) => {
             return dataSources.servicequalityAPI.getAllDrivers();
         },
-        getDriver: (_source, { id }, { dataSources }) => {
-            return dataSources.servicequalityAPI.getDriverById(id);
+        getDriver: (_source, { _id }, { dataSources }) => {
+            return dataSources.servicequalityAPI.getDriverById(_id);
         }
 
     },
     Mutation: {
-
+        createDriver: (_source, { driver }, { dataSources }) => {
+            return dataSources.servicequalityAPI.createDriver(driver);
+        },
+        deleteDriver: (_source, { _id }, { dataSources }) => {
+            return dataSources.servicequalityAPI.deleteDriver(_id);
+        }
     }
 };
