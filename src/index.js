@@ -1,14 +1,14 @@
 import { ApolloServer }  from 'apollo-server';
+import  _ from 'lodash';
 import { ServiceQualityApi } from './datasources/ServiceQualityApi.js';
-import resolvers from './resolvers/resolvers.js';
-import typeDefs from './driver/typeDefs.js';
+import {driverResolvers , driverTypeDefs} from './driver/schema.js';
 
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0
 
 
 const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+    typeDefs: [driverTypeDefs],
+    resolvers: _.merge(driverResolvers),
     dataSources: () => {
         return {
             servicequalityAPI: new ServiceQualityApi(),

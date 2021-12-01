@@ -1,5 +1,5 @@
 import { gql }  from 'apollo-server';
-const typeDefs = gql`
+export const driverTypeDefs = gql`
 #Modelo driver
 type Driver {
     _id : String
@@ -33,4 +33,17 @@ type Mutation {
 }
 `;
 
-export default typeDefs;
+export const driverResolvers = {
+    Query: {
+        getDrivers: (_source, _args, { dataSources }) => {
+            return dataSources.servicequalityAPI.getAllDrivers();
+        },
+        getDriver: (_source, { id }, { dataSources }) => {
+            return dataSources.servicequalityAPI.getDriverById(id);
+        }
+
+    },
+    Mutation: {
+
+    }
+};
