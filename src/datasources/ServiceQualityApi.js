@@ -48,6 +48,42 @@ export class ServiceQualityApi extends RESTDataSource {
         const response = await axios.post(this.baseURL + '/user', user);
         return response.data;
     }
+
+    //Comments Endpoints
+    async getAllComments(){
+        const response = await axios.get(this.baseURL + '/calification');
+        return response.data;
+    }
+
+    async getCommentById(id){
+        const response = await axios.get(this.baseURL + '/calification/' + id);
+        return response.data;
+    }
+
+    async createComment(comment){
+        const response = await axios.post(this.baseURL + '/calification', comment);
+        return response.data;
+    }
+
+    async updateComment(id,commentUpdate){
+        const response = await axios.put(this.baseURL + '/calification/' + id, commentUpdate);
+        return response.data;
+    }
+
+    async deleteComment(id){
+        const response = await axios.delete(this.baseURL + '/calification/' + id);
+        return response.data;
+    }
+
+    async getCommentsByDriver(id){
+        const response = await axios.get(this.baseURL + '/calification/driver/' + id);
+        return response.data;
+    }
+
+    async getCommentsByUser(id){
+        const response = await axios.get(this.baseURL + '/calification/user/' + id);
+        return response.data;
+    }
         
 }
 
