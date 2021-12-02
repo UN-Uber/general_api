@@ -86,4 +86,3 @@ export class ServiceQualityApi extends RESTDataSource {
     }
         
 }
-
