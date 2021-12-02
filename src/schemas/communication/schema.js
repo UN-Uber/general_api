@@ -10,7 +10,7 @@ type Chat {
     messages: [String]
 }
 
-type Mesage {
+type Message {
     _id: String
     session: String
     sender_type: String
@@ -45,13 +45,13 @@ type Mutation {
 export const communicationResolvers = {
     Query: {
         getChats: (_source, _args, { dataSources }) => {
-            return dataSources.communicationAPI.getChats();
+            return dataSources.communicationAPI.getAllChats();
         },
         getChat: (_source, { id }, { dataSources }) => {
-            return dataSources.communicationAPI.getChat(id);
+            return dataSources.communicationAPI.getChatById(id);
         },
         getMessages: (_source, { id }, { dataSources }) => {
-            return dataSources.communicationAPI.getMessages(id);
+            return dataSources.communicationAPI.getAllMessagesById(id);
         }
 
     },

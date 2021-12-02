@@ -28,6 +28,11 @@ export class CommunicationApi extends RESTDataSource {
         return response.data;
     }
 
+    async deleteChat(id){
+        const response = await axios.delete(this.baseURL + '/chat/' + id);
+        return response.data;
+    }
+
     // Messages Endpoints
     async createMessage(id, message){
         const response = await axios.post(this.baseURL + '/message/' + id, message);
