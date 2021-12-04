@@ -25,8 +25,8 @@ async function startApolloServer(){
     const httpServer = http.createServer(app);
 
     const server = new ApolloServer({
-        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs],
-        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers),
+        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, creditCardTypeDefs, clientTypeDefs],
+        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, creditCardResolvers, clientResolvers),
         dataSources: () => {
             return {
                 servicequalityAPI: new ServiceQualityApi(),
