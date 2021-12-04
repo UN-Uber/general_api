@@ -1,4 +1,5 @@
 import { ApolloServer }  from 'apollo-server-express';
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import  _ from 'lodash';
 import { ServiceQualityApi } from './datasources/ServiceQualityApi.js';
 import {driverResolvers , driverTypeDefs} from './schemas/driver/schema.js';
@@ -32,25 +33,11 @@ async function startApolloServer(){
         app,
         path: '/',
     })
+    
+    const port = process.env.PORT || 4000;
 
-    await new Promise(resolve => httpServer.listen({ port: 4000 }, resolve));
-    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+    await new Promise(resolve => httpServer.listen({ port: port}, resolve));
+    console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`);
 }
 
-/*
-const server = new ApolloServer({
-    typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs],
-    resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers),
-    dataSources: () => {
-        return {
-            servicequalityAPI: new ServiceQualityApi(),
-            communicationAPI: new CommunicationApi()
-        };
-    }
-});
-
-// The `listen` method launches a web server.
-server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
-});
-*/
+startApolloServer();
