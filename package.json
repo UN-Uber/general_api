@@ -20,12 +20,18 @@
   },
   "homepage": "https://github.com/UN-Uber/general_api#readme",
   "dependencies": {
+    "@google-cloud/storage": "^5.16.1",
     "apollo-datasource-rest": "^3.4.0",
     "apollo-server-core": "^3.5.0",
     "apollo-server-express": "^3.5.0",
     "axios": "^0.24.0",
     "express": "^4.17.1",
     "graphql": "^16.0.1",
-    "lodash": "^4.17.21"
+    "graphql-upload": "^13.0.0",
+    "lodash": "^4.17.21",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0"
   }
 }

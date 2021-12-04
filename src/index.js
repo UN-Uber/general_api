@@ -12,6 +12,11 @@ import { creditCardResolvers, creditCardTypeDefs } from './schemas/creditCard/sc
 import { clientResolvers, clientTypeDefs } from './schemas/uclient/schema.js'; 
 import express from 'express';
 import http from 'http';
+import { graphqlUploadExpress } from 'graphql-upload';
+import {uploadTypeDefs, uploadResolvers} from './schemas/upload/schema.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0
 
@@ -20,8 +25,8 @@ async function startApolloServer(){
     const httpServer = http.createServer(app);
 
     const server = new ApolloServer({
-        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs,creditCardTypeDefs,clientTypeDefs],
-        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, creditCardResolvers,clientResolvers),
+        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs],
+        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers),
         dataSources: () => {
             return {
                 servicequalityAPI: new ServiceQualityApi(),
@@ -33,11 +38,12 @@ async function startApolloServer(){
     });
 
     await server.start();
+    app.use(graphqlUploadExpress());
     server.applyMiddleware({
         app,
         path: '/',
     })
-    
+
     const port = process.env.PORT || 4000;
 
     await new Promise(resolve => httpServer.listen({ port: port}, resolve));
