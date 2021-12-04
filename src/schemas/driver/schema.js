@@ -11,6 +11,7 @@ type Driver {
     phoneNumber : String
     email : String
     totalOfComments : Int
+    occupied: Boolean
 }
 
 input DriverInput {
@@ -25,11 +26,13 @@ input DriverInput {
 type Query {
     getDrivers : [Driver]
     getDriver(_id : String) : Driver
+    getUnoccupiedDriver : Driver
 }
 
 type Mutation {
     createDriver(driver : DriverInput) : Driver
     deleteDriver(_id : String) : Boolean
+    changeStateDriver(_id : String) : Driver
 }
 `;
 
@@ -40,6 +43,9 @@ export const driverResolvers = {
         },
         getDriver: (_source, { _id }, { dataSources }) => {
             return dataSources.servicequalityAPI.getDriverById(_id);
+        },
+        getUnoccupiedDriver: (_source, _args, { dataSources }) => {
+            return dataSources.servicequalityAPI.getUnoccupiedDriver();
         }
 
     },
@@ -49,6 +55,9 @@ export const driverResolvers = {
         },
         deleteDriver: (_source, { _id }, { dataSources }) => {
             return dataSources.servicequalityAPI.deleteDriver(_id);
+        },
+        changeStateDriver: (_source, { _id }, { dataSources }) => {
+            return dataSources.servicequalityAPI.changeStateDriver(_id);
         }
     }
 };

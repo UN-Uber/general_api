@@ -28,6 +28,16 @@ export class ServiceQualityApi extends RESTDataSource {
         return response.data;
     }
 
+    async changeStateDriver(id){
+        const response = await axios.put(this.baseURL + '/driver/' + id);
+        return response.data;
+    }
+
+    async getUnoccupiedDriver(){
+        const response = await axios.get(this.baseURL + '/driver/Ocuppied');
+        return response.data;
+    }
+
     //UserC Endpoints
     async getAllUsers(){
         const response = await axios.get(this.baseURL + '/user');
