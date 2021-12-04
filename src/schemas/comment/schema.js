@@ -68,5 +68,5 @@ export const commentResolvers = {
         deleteComment: (_source, {_id}, { dataSources }) => {
             return dataSources.servicequalityAPI.deleteComment(_id);
         }
-    },
+    }
 };

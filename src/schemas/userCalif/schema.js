@@ -1,4 +1,5 @@
 import { gql }  from 'apollo-server';
+
 export const userCTypeDefs = gql`
 type UserCalif{
     _id: String
@@ -38,5 +39,5 @@ export const userCResolvers = {
         deleteUserCalif:(_source, {_id}, { dataSources }) => {
             return dataSources.servicequalityAPI.deleteUser(_id);
         }
-    },
+    }
 };

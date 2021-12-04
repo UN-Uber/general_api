@@ -1,4 +1,5 @@
 import { gql }  from 'apollo-server';
+
 export const driverTypeDefs = gql`
 type Driver {
     _id : String
