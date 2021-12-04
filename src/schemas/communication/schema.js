@@ -20,11 +20,11 @@ type Message {
 
 input ChatInput {
     driver_id: String
+    user_id: String
     state: String
 }
 
 input MessageInput {
-    session: String
     sender_type: String
     message: String
 }
@@ -47,23 +47,23 @@ export const communicationResolvers = {
         getChats: (_source, _args, { dataSources }) => {
             return dataSources.communicationAPI.getAllChats();
         },
-        getChat: (_source, { id }, { dataSources }) => {
-            return dataSources.communicationAPI.getChatById(id);
+        getChat: (_source, { _id }, { dataSources }) => {
+            return dataSources.communicationAPI.getChatById(_id);
         },
-        getMessages: (_source, { id }, { dataSources }) => {
-            return dataSources.communicationAPI.getAllMessagesById(id);
+        getMessages: (_source, { _id }, { dataSources }) => {
+            return dataSources.communicationAPI.getAllMessagesById(_id);
         }
 
     },
     Mutation: {
-        createChat: (_source, _args, { dataSources }) => {
-            return dataSources.communicationAPI.createChat();
+        createChat: (_source, { chat }, { dataSources }) => {
+            return dataSources.communicationAPI.createChat(chat);
         },
-        createMessage: (_source, { id, message }, { dataSources }) => {
-            return dataSources.communicationAPI.createMessage(id, message);
+        createMessage: (_source, { _id, message }, { dataSources }) => {
+            return dataSources.communicationAPI.createMessage(_id, message);
         },
-        deleteChat: (_source, { id }, { dataSources }) => {
-            return dataSources.communicationAPI.deleteChat(id);
+        deleteChat: (_source, { _id }, { dataSources }) => {
+            return dataSources.communicationAPI.deleteChat(_id);
         }
     }
 };
