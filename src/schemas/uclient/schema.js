@@ -21,7 +21,7 @@ type CreditCard{
     cvv: Int
 }
 
-input DriverInput {
+input ClientInput {
     fName : String!
     sName : String
     sureName : String!
@@ -39,9 +39,9 @@ type Query {
 }
 
 type Mutation {
-    createClient(client : ClientInput!) : Client
-    deleteClient(idClient : Int!) : Boolean
-    updateClient(idClient: Int!, client:ClientInput!):Client
+    createClient(client : ClientInput!) : String
+    deleteClient(idClient : Int!) : String
+    updateClient(idClient: Int!, client:ClientInput!):String
 }
 `;
 
@@ -50,11 +50,11 @@ export const clientResolvers = {
         getClients: (_source, _args, { dataSources }) => {
             return dataSources.AccountApi.getAllClients();
         },
-        getClient: (_source, { id }, { dataSources }) => {
-            return dataSources.AccountApi.getClientById(id);
+        getClient: (_source, { idClient }, { dataSources }) => {
+            return dataSources.AccountApi.getClientById(idClient);
         },
-        getCardsClient:(_source, { id }, { dataSources }) => {
-            return dataSources.AccountApi.getCardsByClient(id);
+        getCardsClient:(_source, { idClient }, { dataSources }) => {
+            return dataSources.AccountApi.getCardsByClient(idClient);
         },
 
     },
@@ -62,11 +62,11 @@ export const clientResolvers = {
         createClient: (_source, {client}, { dataSources }) => {
             return dataSources.AccountApi.createClient(client);
         },
-        deleteClient: (_source, {id}, { dataSources }) => {
-            return dataSources.AccountApi.deleteClientById(id);
+        deleteClient: (_source, {idClient}, { dataSources }) => {
+            return dataSources.AccountApi.deleteClientById(idClient);
         },
-        updateClient: (_source, {id, client}, { dataSources }) => {
-            return dataSources.AccountApi.updateClientById(id, client);
+        updateClient: (_source, {idClient, client}, { dataSources }) => {
+            return dataSources.AccountApi.updateClientById(idClient, client);
         },
     }
 };

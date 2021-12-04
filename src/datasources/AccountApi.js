@@ -27,17 +27,17 @@ export class AccountApi extends RESTDataSource{
 
     async createClient(client){
         const response = await axios.post(this.baseURL + '/Client', client);
-        return response.data;
+        return response.status;
     }
 
     async updateClientById(id, client){
         const response = await axios.put(this.baseURL + '/Client/' + id, client);
-        return response.data;
+        return response.status;
     }
 
     async deleteClientById(id){
         const response = await axios.delete(this.baseURL + '/Client/' + id);
-        return response.data;
+        return response.status;
     }
 
     // Endpoints Account - Cards
@@ -54,17 +54,17 @@ export class AccountApi extends RESTDataSource{
 
     async createCard(card){
         const response = await axios.post(this.baseURL + '/CreditCard' , card);
-        return response.data;
+        return response.status;
     }
 
     async updateCardById(id, card){
         const response = await axios.put(this.baseURL + '/CreditCard/' + id, card);
-        return response.data;
+        return response.status;
     }
 
     async deletCardById(id){
         const response = await axios.delete(this.baseURL + '/CreditCard/' + id);
-        return response.data;
+        return response.status;
     }
     
 }

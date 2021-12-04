@@ -23,9 +23,9 @@ type Query {
 }
 
 type Mutation {
-    createCard(card : CreditCardInput!) : CreditCard
-    deleteCard(idCard : Int!) : Boolean
-    updateCard(idCard: Int!, card:CardInput!):CreditCard
+    createCard(card : CreditCardInput!) : String
+    deleteCard(idCard : Int!) : String
+    updateCard(idCard: Int!, card:CreditCardInput!):String
 }
 `;
 
@@ -34,19 +34,19 @@ export const creditCardResolvers = {
         getCards: (_source, _args, { dataSources }) => {
             return dataSources.AccountApi.getAllCards();
         },
-        getCard: (_source, { id }, { dataSources }) => {
-            return dataSources.AccountApi.getCardById(id);
+        getCard: (_source, { idCard }, { dataSources }) => {
+            return dataSources.AccountApi.getCardById(idCard);
         },
     },
     Mutation: {
         createCard: (_source, {card}, { dataSources }) => {
             return dataSources.AccountApi.createCard(card);
         },
-        deleteCard: (_source, {id}, { dataSources }) => {
-            return dataSources.AccountApi.deletCardById(id);
+        deleteCard: (_source, {idCard}, { dataSources }) => {
+            return dataSources.AccountApi.deletCardById(idCard);
         },
-        updateClient: (_source, {id, card}, { dataSources }) => {
-            return dataSources.AccountApi.updateCardById(id, card);
+        updateClient: (_source, {idCard, card}, { dataSources }) => {
+            return dataSources.AccountApi.updateCardById(idCard, card);
         },
     }
 };
