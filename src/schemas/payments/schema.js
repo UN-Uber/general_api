@@ -18,11 +18,11 @@ input PaymentInput{
 
 type Query{
     getPayments: [Payment]
-    getUserPayments(userId: Int): [Payment]
+    getUserPayments(userId: Int!): [Payment]
 }
 
 type Mutation {
-    createPayment(payment: PaymentInput): Payment
+    createPayment(payment: PaymentInput!): Payment
 }`;
 
 
