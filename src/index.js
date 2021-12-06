@@ -10,6 +10,8 @@ import { CommunicationApi } from './datasources/CommunicationApi.js';
 import { AccountApi } from './datasources/AccountApi.js';
 import { creditCardResolvers, creditCardTypeDefs } from './schemas/creditCard/schema.js';
 import { clientResolvers, clientTypeDefs } from './schemas/uclient/schema.js'; 
+import { PaymentApi } from './datasources/PaymentApi.js';
+import { paymentResolvers, paymentTypeDefs } from './schemas/payments/schema.js';
 import express from 'express';
 import http from 'http';
 import { graphqlUploadExpress } from 'graphql-upload';
@@ -25,13 +27,14 @@ async function startApolloServer(){
     const httpServer = http.createServer(app);
 
     const server = new ApolloServer({
-        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, creditCardTypeDefs, clientTypeDefs],
-        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, creditCardResolvers, clientResolvers),
+        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, creditCardTypeDefs, clientTypeDefs, paymentTypeDefs],
+        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, creditCardResolvers, clientResolvers, paymentResolvers),
         dataSources: () => {
             return {
                 servicequalityAPI: new ServiceQualityApi(),
                 communicationAPI: new CommunicationApi(),
-                AccountApi : new AccountApi()
+                AccountApi : new AccountApi(),
+                PaymentApi: new PaymentApi()
             };
         },
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
