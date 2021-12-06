@@ -7,6 +7,8 @@ import {userCTypeDefs , userCResolvers} from './schemas/userCalif/schema.js';
 import {commentTypeDefs, commentResolvers} from './schemas/comment/schema.js';
 import { communicationResolvers, communicationTypeDefs } from './schemas/communication/schema.js';
 import { CommunicationApi } from './datasources/CommunicationApi.js';
+import { taxingResolvers, taxingTypeDefs } from './schemas/taxing/schema.js'; 
+import { TaxingApi } from './datasources/TaxingApi.js';
 import express from 'express';
 import http from 'http';
 import { graphqlUploadExpress } from 'graphql-upload';
@@ -22,12 +24,13 @@ async function startApolloServer(){
     const httpServer = http.createServer(app);
 
     const server = new ApolloServer({
-        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs],
-        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers),
+        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, taxingTypeDefs],
+        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, taxingResolvers),
         dataSources: () => {
             return {
                 servicequalityAPI: new ServiceQualityApi(),
-                communicationAPI: new CommunicationApi()
+                communicationAPI: new CommunicationApi(),
+                taxingApi: new TaxingApi()
             };
         },
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
