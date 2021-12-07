@@ -9,6 +9,11 @@ import { communicationResolvers, communicationTypeDefs } from './schemas/communi
 import { CommunicationApi } from './datasources/CommunicationApi.js';
 import { taxingResolvers, taxingTypeDefs } from './schemas/taxing/schema.js'; 
 import { TaxingApi } from './datasources/TaxingApi.js';
+import { AccountApi } from './datasources/AccountApi.js';
+import { creditCardResolvers, creditCardTypeDefs } from './schemas/creditCard/schema.js';
+import { clientResolvers, clientTypeDefs } from './schemas/uclient/schema.js'; 
+import { PaymentApi } from './datasources/PaymentApi.js';
+import { paymentResolvers, paymentTypeDefs } from './schemas/payments/schema.js';
 import express from 'express';
 import http from 'http';
 import { graphqlUploadExpress } from 'graphql-upload';
@@ -24,13 +29,15 @@ async function startApolloServer(){
     const httpServer = http.createServer(app);
 
     const server = new ApolloServer({
-        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, taxingTypeDefs],
-        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, taxingResolvers),
+        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, creditCardTypeDefs, clientTypeDefs, paymentTypeDefs,taxingTypeDefs],
+        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, creditCardResolvers, clientResolvers, paymentResolvers,taxingResolvers),
         dataSources: () => {
             return {
                 servicequalityAPI: new ServiceQualityApi(),
                 communicationAPI: new CommunicationApi(),
                 taxingApi: new TaxingApi()
+                AccountApi : new AccountApi(),
+                PaymentApi: new PaymentApi()
             };
         },
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
