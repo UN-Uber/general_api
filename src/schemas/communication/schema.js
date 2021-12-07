@@ -18,6 +18,10 @@ type Message {
     send_at: String
 }
 
+type Delete {
+    message: String
+}
+
 input ChatInput {
     driver_id: String
     user_id: String
@@ -38,7 +42,7 @@ type Query {
 type Mutation {
     createChat(chat : ChatInput) : Chat
     createMessage(_id: String, message : MessageInput) : Message
-    deleteChat(_id : String) : String
+    deleteChat(_id : String) : Delete
 }
 `;
 
