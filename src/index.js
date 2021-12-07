@@ -19,20 +19,23 @@ import http from 'http';
 import { graphqlUploadExpress } from 'graphql-upload';
 import {uploadTypeDefs, uploadResolvers} from './schemas/upload/schema.js';
 import dotenv from 'dotenv';
+import { identityResolvers, identityTypeDefs } from './schemas/identity/schema.js';
+import { IdentityApi } from './datasources/IdentityApi.js';
 import { interestedResolvers, interestedTypeDefs } from './schemas/interested/schema.js';
 import {InterestedApi} from './datasources/InterestedApi.js';
 
+
 dotenv.config();
 
-process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0
+//process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0
 
 async function startApolloServer(){
     const app = express();
     const httpServer = http.createServer(app);
 
     const server = new ApolloServer({
-        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, creditCardTypeDefs, clientTypeDefs, paymentTypeDefs,taxingTypeDefs,interestedTypeDefs],
-        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, creditCardResolvers, clientResolvers, paymentResolvers,taxingResolvers,interestedResolvers),
+        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, creditCardTypeDefs, clientTypeDefs, paymentTypeDefs,taxingTypeDefs,interestedTypeDefs,identityTypeDefs],
+        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, creditCardResolvers, clientResolvers, paymentResolvers,taxingResolvers,interestedResolvers,identityResolvers),
         dataSources: () => {
             return {
                 servicequalityAPI: new ServiceQualityApi(),
@@ -40,7 +43,9 @@ async function startApolloServer(){
                 taxingApi: new TaxingApi(),
                 AccountApi : new AccountApi(),
                 PaymentApi: new PaymentApi(),
+                IdentityApi : new IdentityApi(),
                 interestedAPI: new InterestedApi()
+
             };
         },
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
