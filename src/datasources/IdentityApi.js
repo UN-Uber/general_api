@@ -10,7 +10,6 @@ export class IdentityApi extends RESTDataSource {
     //login
     async login(username, password) {
         const response = await axios.post(this.baseURL + '/login?username=' + username + '&password=' + password);
-        console.log(response);
         return response.data;
     }
     async logout(token){
