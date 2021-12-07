@@ -19,25 +19,28 @@ import http from 'http';
 import { graphqlUploadExpress } from 'graphql-upload';
 import {uploadTypeDefs, uploadResolvers} from './schemas/upload/schema.js';
 import dotenv from 'dotenv';
+import { identityResolvers, identityTypeDefs } from './schemas/identity/schema.js';
+import { IdentityApi } from './datasources/IdentityApi.js';
 
 dotenv.config();
 
-process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0
+//process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0
 
 async function startApolloServer(){
     const app = express();
     const httpServer = http.createServer(app);
 
     const server = new ApolloServer({
-        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, creditCardTypeDefs, clientTypeDefs, paymentTypeDefs,taxingTypeDefs],
-        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, creditCardResolvers, clientResolvers, paymentResolvers,taxingResolvers),
+        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, creditCardTypeDefs, clientTypeDefs, paymentTypeDefs,taxingTypeDefs,identityTypeDefs],
+        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, creditCardResolvers, clientResolvers, paymentResolvers,taxingResolvers,identityResolvers),
         dataSources: () => {
             return {
                 servicequalityAPI: new ServiceQualityApi(),
                 communicationAPI: new CommunicationApi(),
-                taxingApi: new TaxingApi()
+                taxingApi: new TaxingApi(),
                 AccountApi : new AccountApi(),
-                PaymentApi: new PaymentApi()
+                PaymentApi: new PaymentApi(),
+                IdentityApi : new IdentityApi()
             };
         },
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
