@@ -7,6 +7,8 @@ import {userCTypeDefs , userCResolvers} from './schemas/userCalif/schema.js';
 import {commentTypeDefs, commentResolvers} from './schemas/comment/schema.js';
 import { communicationResolvers, communicationTypeDefs } from './schemas/communication/schema.js';
 import { CommunicationApi } from './datasources/CommunicationApi.js';
+import { taxingResolvers, taxingTypeDefs } from './schemas/taxing/schema.js'; 
+import { TaxingApi } from './datasources/TaxingApi.js';
 import { AccountApi } from './datasources/AccountApi.js';
 import { creditCardResolvers, creditCardTypeDefs } from './schemas/creditCard/schema.js';
 import { clientResolvers, clientTypeDefs } from './schemas/uclient/schema.js'; 
@@ -27,12 +29,13 @@ async function startApolloServer(){
     const httpServer = http.createServer(app);
 
     const server = new ApolloServer({
-        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, creditCardTypeDefs, clientTypeDefs, paymentTypeDefs],
-        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, creditCardResolvers, clientResolvers, paymentResolvers),
+        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, creditCardTypeDefs, clientTypeDefs, paymentTypeDefs,taxingTypeDefs],
+        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, creditCardResolvers, clientResolvers, paymentResolvers,taxingResolvers),
         dataSources: () => {
             return {
                 servicequalityAPI: new ServiceQualityApi(),
                 communicationAPI: new CommunicationApi(),
+                taxingApi: new TaxingApi()
                 AccountApi : new AccountApi(),
                 PaymentApi: new PaymentApi()
             };
