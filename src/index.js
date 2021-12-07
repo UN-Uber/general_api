@@ -19,6 +19,8 @@ import http from 'http';
 import { graphqlUploadExpress } from 'graphql-upload';
 import {uploadTypeDefs, uploadResolvers} from './schemas/upload/schema.js';
 import dotenv from 'dotenv';
+import { interestedResolvers, interestedTypeDefs } from './schemas/interested/schema.js';
+import {InterestedApi} from './datasources/InterestedApi.js';
 
 dotenv.config();
 
@@ -29,15 +31,16 @@ async function startApolloServer(){
     const httpServer = http.createServer(app);
 
     const server = new ApolloServer({
-        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, creditCardTypeDefs, clientTypeDefs, paymentTypeDefs,taxingTypeDefs],
-        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, creditCardResolvers, clientResolvers, paymentResolvers,taxingResolvers),
+        typeDefs: [driverTypeDefs, communicationTypeDefs, userCTypeDefs, commentTypeDefs, uploadTypeDefs, creditCardTypeDefs, clientTypeDefs, paymentTypeDefs,taxingTypeDefs,interestedTypeDefs],
+        resolvers: _.merge(driverResolvers, communicationResolvers, userCResolvers, commentResolvers, uploadResolvers, creditCardResolvers, clientResolvers, paymentResolvers,taxingResolvers,interestedResolvers),
         dataSources: () => {
             return {
                 servicequalityAPI: new ServiceQualityApi(),
                 communicationAPI: new CommunicationApi(),
-                taxingApi: new TaxingApi()
+                taxingApi: new TaxingApi(),
                 AccountApi : new AccountApi(),
-                PaymentApi: new PaymentApi()
+                PaymentApi: new PaymentApi(),
+                interestedAPI: new InterestedApi()
             };
         },
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
