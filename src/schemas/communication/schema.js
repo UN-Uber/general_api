@@ -38,7 +38,7 @@ type Query {
 type Mutation {
     createChat(chat : ChatInput) : Chat
     createMessage(_id: String, message : MessageInput) : Message
-    deleteChat(_id : String) : Boolean
+    deleteChat(_id : String) : String
 }
 `;
 
