@@ -21,6 +21,7 @@ process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 async function startApolloServer() {
 	const app = express();
 	const httpServer = http.createServer(app);
+	const authApi = new IdentityApi();
 
 	const server = new ApolloServer({
 		schema: schema,
@@ -35,6 +36,20 @@ async function startApolloServer() {
 				interestedAPI: new InterestedApi(),
 				routeAPI: new RouteApi(),
 			};
+		},
+		context: ({ req }) => {
+			const token = req.headers.authorization || "";
+			if (!token) {
+				return { user: null };
+			}
+			const response = authApi.verifyToken(token).then((response) => {
+				return {
+					user: response.data.user,
+					status: response.status,
+					message: response.data.message,
+				};
+			});
+			return response;
 		},
 		plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 	});
