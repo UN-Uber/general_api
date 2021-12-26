@@ -1,4 +1,5 @@
 import { gql }  from 'apollo-server-express';
+import { __Type } from 'graphql';
 
 export const clientTypeDefs = gql`
 type Client {
@@ -21,6 +22,10 @@ type CreditCard{
     cvv: Int
 }
 
+type Response{
+    response : String
+}
+
 input ClientInput {
     fName : String!
     sName : String
@@ -32,6 +37,14 @@ input ClientInput {
     image: String!
 }
 
+input ClientData {
+    email : String!
+    telNumber : String!
+    password : String!
+}
+
+union ResponseClient = Client | Response
+
 type Query {
     getClients : [Client]
     getClient(idClient : Int) : Client
@@ -39,13 +52,26 @@ type Query {
 }
 
 type Mutation {
-    createClient(client : ClientInput!) : String
+    createClient(client : ClientInput!) : Response
     deleteClient(idClient : Int!) : String
     updateClient(idClient: Int!, client:ClientInput!):String
+    enterClient(clientData : ClientData!) : ResponseClient
 }
 `;
 
+
 export const clientResolvers = {
+    ResponseClient:{
+        __resolveType(obj, context, info){
+            if(obj.fName){
+                return 'Client';
+            }
+            if(obj.response){
+                return 'Response';
+            }
+            return null;
+        },
+    },
     Query: {
         getClients: (_source, _args, { dataSources }) => {
             return dataSources.AccountApi.getAllClients();
@@ -68,5 +94,8 @@ export const clientResolvers = {
         updateClient: (_source, {idClient, client}, { dataSources }) => {
             return dataSources.AccountApi.updateClientById(idClient, client);
         },
+        enterClient: (_source, {clientData}, {dataSources}) => {
+            return dataSources.AccountApi.enterClient(clientData);
+        }
     }
 };
