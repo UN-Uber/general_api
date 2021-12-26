@@ -59,7 +59,7 @@ export class AccountApi extends RESTDataSource{
 
     async createCard(card){
         const response = await axios.post(this.baseURL + '/CreditCard' , card);
-        return response.status;
+        return response.data;
     }
 
     async updateCardById(id, card){
