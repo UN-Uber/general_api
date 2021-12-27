@@ -17,6 +17,9 @@ input CreditCardInput {
     cvv: Int!
 }
 
+type Response {
+    response : String
+}
 
 # Types para el la entidad CreditCard del microservicio Payment
 type CreditCardPay {
@@ -42,7 +45,7 @@ type Query {
 }
 
 type Mutation {
-    createCard(card : CreditCardInput!) : String
+    createCard(card : CreditCardInput!) : Response
     deleteCard(idCard : Int!) : String
     updateCard(idCard: Int!, card:CreditCardInput!):String
 
