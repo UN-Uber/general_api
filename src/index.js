@@ -13,6 +13,8 @@ import { IdentityApi } from "./datasources/IdentityApi.js";
 import { InterestedApi } from "./datasources/InterestedApi.js";
 import { RouteApi } from "./datasources/RouteApi.js";
 import { schema } from "./schemas/generalSchema.js";
+import { AuthenticationError } from "apollo-server-express";
+import { authTypeDefs , authResolvers } from "./schemas/auth/schema.js";
 
 dotenv.config();
 
@@ -40,32 +42,53 @@ async function startApolloServer() {
 		context: ({ req }) => {
 			const token = req.headers.authorization || "";
 			if (!token) {
-				return { user: null };
+				throw new AuthenticationError("Token not provided");
 			}
 			const response = authApi.verifyToken(token).then((response) => {
-				return {
-					user: response.data.user,
-					status: response.status,
-					message: response.data.message,
-				};
-			});
-			return response;
+                if(response.status == 401){
+                    throw new AuthenticationError(response.data.message);
+                }
+                return response.data.user;
+            });
+            return response;
 		},
 		plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 	});
 
-	await server.start();
+    const serverAuth = new ApolloServer({
+        typeDefs: authTypeDefs,
+        resolvers: authResolvers,
+        dataSources: () => {
+            return {
+                IdentityApi: new IdentityApi(),
+                AccountApi: new AccountApi(),
+            };
+        },
+        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    });
+
+	
+    await serverAuth.start();
+
+    serverAuth.applyMiddleware({
+        app,
+        path: "/auth",
+    });
+    
+    await server.start();
 	app.use(graphqlUploadExpress());
 	server.applyMiddleware({
 		app,
 		path: "/",
 	});
 
+    
+
 	const port = process.env.PORT || 4000;
 
 	await new Promise((resolve) => httpServer.listen({ port: port }, resolve));
 	console.log(
-		`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
+		`🚀 Server ready at http://localhost:${port}${server.graphqlPath}\n🚀 AuthServer ready at http://localhost:${port}${serverAuth.graphqlPath}`
 	);
 }
 

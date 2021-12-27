@@ -38,8 +38,8 @@ type Mutation {
 
 export const driverResolvers = {
     Query: {
-        getDrivers: (_source, _args, context) => {
-            return context.dataSources.servicequalityAPI.getAllDrivers();
+        getDrivers: (_source, _args, { dataSources }) => {
+            return dataSources.servicequalityAPI.getAllDrivers();
         },
         getDriver: (_source, { _id }, { dataSources }) => {
             return dataSources.servicequalityAPI.getDriverById(_id);
