@@ -71,7 +71,22 @@ export const authResolvers = {
     },
     Mutation:{
         createClient:(_source, {client}, {dataSources}) => {
-            return dataSources.AccountApi.createClient(client);
+            async function addClient(){
+                let clientCre = await dataSources.AccountApi.createClient(client);
+                if(clientCre.response === "Email or phone number already register"){
+                    return clientCre;
+                }else{
+                    var idClient = clientCre.response;
+                    let qualityRes = await dataSources.ServiceQuality.createUser({fk:parseInt(idClient)});
+                    console.log(idClient);
+                    if(qualityRes.status === 201){
+                        return clientCre;
+                    }else{
+                        return {response: null};
+                    }
+                }
+            }
+            return addClient();
         },
     },
 }

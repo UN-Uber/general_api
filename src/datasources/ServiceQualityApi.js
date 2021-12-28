@@ -56,7 +56,7 @@ export class ServiceQualityApi extends RESTDataSource {
 
     async createUser(user){
         const response = await axios.post(this.baseURL + '/user', user);
-        return response.data;
+        return response;
     }
 
     //Comments Endpoints
