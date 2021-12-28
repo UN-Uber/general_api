@@ -4,9 +4,20 @@ import { AuthenticationError } from 'apollo-server-express';
 export const authTypeDefs = gql`
 
 input AuthInput {
+    email : String
+    telNumber : String
+    password : String!
+}
+
+input ClientInput {
+    fName : String!
+    sName : String
+    sureName : String!
+    active : Int!
     email : String!
     telNumber : String!
     password : String!
+    image: String!
 }
 
 type AuthResponse {
@@ -15,8 +26,16 @@ type AuthResponse {
     expiresIn : String!
 }
 
+type Response{
+    response : String
+}
+
 type Query{
     login(authInput : AuthInput!) : AuthResponse!
+}
+
+type Mutation{
+    createClient(client : ClientInput!) : Response
 }
 
 
@@ -48,6 +67,26 @@ export const authResolvers = {
             }
 
             return fetchData();
+        },
+    },
+    Mutation:{
+        createClient:(_source, {client}, {dataSources}) => {
+            async function addClient(){
+                let clientCre = await dataSources.AccountApi.createClient(client);
+                if(clientCre.response === "Email or phone number already register"){
+                    return clientCre;
+                }else{
+                    var idClient = clientCre.response;
+                    let qualityRes = await dataSources.ServiceQuality.createUser({fk:parseInt(idClient)});
+                    console.log(idClient);
+                    if(qualityRes.status === 201){
+                        return clientCre;
+                    }else{
+                        return {response: null};
+                    }
+                }
+            }
+            return addClient();
         },
     },
 }

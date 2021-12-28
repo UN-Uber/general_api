@@ -62,6 +62,9 @@ async function startApolloServer() {
             return {
                 IdentityApi: new IdentityApi(),
                 AccountApi: new AccountApi(),
+				ServiceQuality : new ServiceQualityApi(),
+				Communication: new CommunicationApi(),
+				Payment: new PaymentApi(),
             };
         },
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],

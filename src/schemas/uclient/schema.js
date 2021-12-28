@@ -26,6 +26,12 @@ type Response{
     response : String
 }
 
+input ClientData {
+    email : String!
+    telNumber : String!
+    password : String!
+}
+
 input ClientInput {
     fName : String!
     sName : String
@@ -37,12 +43,6 @@ input ClientInput {
     image: String!
 }
 
-input ClientData {
-    email : String!
-    telNumber : String!
-    password : String!
-}
-
 union ResponseClient = Client | Response
 
 type Query {
@@ -52,10 +52,8 @@ type Query {
 }
 
 type Mutation {
-    createClient(client : ClientInput!) : Response
     deleteClient(idClient : Int!) : String
     updateClient(idClient: Int!, client:ClientInput!):String
-    enterClient(clientData : ClientData!) : ResponseClient
 }
 `;
 
@@ -85,17 +83,11 @@ export const clientResolvers = {
 
     },
     Mutation: {
-        createClient: (_source, {client}, { dataSources }) => {
-            return dataSources.AccountApi.createClient(client);
-        },
         deleteClient: (_source, {idClient}, { dataSources }) => {
             return dataSources.AccountApi.deleteClientById(idClient);
         },
         updateClient: (_source, {idClient, client}, { dataSources }) => {
             return dataSources.AccountApi.updateClientById(idClient, client);
         },
-        enterClient: (_source, {clientData}, {dataSources}) => {
-            return dataSources.AccountApi.enterClient(clientData);
-        }
     }
 };
