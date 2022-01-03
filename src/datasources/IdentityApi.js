@@ -19,10 +19,10 @@ export class IdentityApi extends RESTDataSource {
 
 	}
 
-	async generateToken(user) {
+	async generateToken(payload) {
 		const response = await axios.post(
 			this.baseURL + "/auth/generateToken",
-			{ user }
+			{ payload }
 		);
 		return response;
 	}
