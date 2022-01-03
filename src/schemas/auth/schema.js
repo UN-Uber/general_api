@@ -44,25 +44,16 @@ type Mutation{
 export const authResolvers = {
     Query: {
         login: (_source, { authInput }, { dataSources }) => {
-            /*const loginData = dataSources.AccountApi.enterClient(authInput).then((response) => {
-                if(response.response){
-                    throw new AuthenticationError(response.response);
-                }
-                return response;
-            }).then((response) => {
-                let resp = dataSources.IdentityApi.generateToken(response.email);
-                return resp;
-            }).then((response) => {
-                return response.data;
-            });
-            return loginData;*/
-            
             async function fetchData(){
                 let loginData = await dataSources.AccountApi.enterClient(authInput);
                 if(loginData.response){
                     throw new AuthenticationError(loginData.response);
                 }
-                let resp = await dataSources.IdentityApi.generateToken(loginData.email);
+                const payload = {
+                    user: loginData.email,
+                    id: loginData.idClient
+                }
+                let resp = await dataSources.IdentityApi.generateToken(payload);
                 return resp.data;
             }
 

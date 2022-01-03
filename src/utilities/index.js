@@ -40,10 +40,3 @@ export const uploadToGoogleCloud = (createReadStream, filename) => {
 	);
 };
 
-export const assertAuthenticated = (context) => {
-    if (!context.user && context.status == 401) {
-		throw new AuthenticationError(context.message);
-	}else if (!context.user){
-        throw new AuthenticationError("Token not provided");
-    }
-};

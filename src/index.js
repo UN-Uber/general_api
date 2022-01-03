@@ -34,7 +34,6 @@ async function startApolloServer() {
 				taxingApi: new TaxingApi(),
 				AccountApi: new AccountApi(),
 				PaymentApi: new PaymentApi(),
-				IdentityApi: new IdentityApi(),
 				interestedAPI: new InterestedApi(),
 				routeAPI: new RouteApi(),
 			};
