@@ -37,8 +37,6 @@ type Query{
 type Mutation{
     createClient(client : ClientInput!) : Response
 }
-
-
 `
 
 export const authResolvers = {
@@ -54,6 +52,7 @@ export const authResolvers = {
                     id: loginData.idClient
                 }
                 let resp = await dataSources.IdentityApi.generateToken(payload);
+
                 return resp.data;
             }
 
