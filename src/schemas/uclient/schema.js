@@ -43,6 +43,18 @@ input ClientInput {
     image: String!
 }
 
+input ChangePasswordInput {
+    fName : String!
+    sName : String
+    sureName : String!
+    active : Int!
+    email : String!
+    telNumber : String!
+    password : String!
+    newPassword : String!
+    image: String!
+}
+
 union ResponseClient = Client | Response
 
 type Query {
@@ -54,6 +66,7 @@ type Query {
 type Mutation {
     deleteClient(idClient : Int!) : String
     updateClient(idClient: Int!, client:ClientInput!):String
+    updatePassword(idClient: Int!, client:ChangePasswordInput!):Response
 }
 `;
 
@@ -89,5 +102,8 @@ export const clientResolvers = {
         updateClient: (_source, {idClient, client}, { dataSources }) => {
             return dataSources.AccountApi.updateClientById(idClient, client);
         },
+        updatePassword: (_source, {idClient, client}, { dataSources }) => {
+            return dataSources.AccountApi.updatePasswordById(idClient, client);
+        }
     }
 };

@@ -45,6 +45,11 @@ export class AccountApi extends RESTDataSource{
         return response.data;
     }
 
+    async updatePasswordById(id, client){
+        const response = await axios.put(this.baseURL + '/Client/changePass/'+id, client);
+        return response.data;
+    }
+
     // Endpoints Account - Cards
 
     async getAllCards(){
