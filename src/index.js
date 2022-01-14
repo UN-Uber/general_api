@@ -15,6 +15,7 @@ import { RouteApi } from "./datasources/RouteApi.js";
 import { schema } from "./schemas/generalSchema.js";
 import { AuthenticationError } from "apollo-server-express";
 import { authTypeDefs , authResolvers } from "./schemas/auth/schema.js";
+import {client} from './utilities/ldap.js'
 
 dotenv.config();
 
@@ -63,7 +64,7 @@ async function startApolloServer() {
                 AccountApi: new AccountApi(),
 				ServiceQuality : new ServiceQualityApi(),
 				Communication: new CommunicationApi(),
-				Payment: new PaymentApi(),
+				Payment: new PaymentApi()
             };
         },
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
