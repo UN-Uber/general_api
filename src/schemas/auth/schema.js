@@ -1,5 +1,6 @@
 import { gql }  from 'apollo-server-express';
 import { AuthenticationError } from 'apollo-server-express';
+import { client as Client, getLastUID, checkIfExist, comparePassword, addUser } from '../../utilities/ldap.js';
 
 export const authTypeDefs = gql`
 
@@ -42,18 +43,32 @@ type Mutation{
 export const authResolvers = {
     Query: {
         login: (_source, { authInput }, { dataSources }) => {
+            
             async function fetchData(){
-                let loginData = await dataSources.AccountApi.enterClient(authInput);
-                if(loginData.response){
-                    throw new AuthenticationError(loginData.response);
-                }
-                const payload = {
-                    user: loginData.email,
-                    id: loginData.idClient
-                }
-                let resp = await dataSources.IdentityApi.generateToken(payload);
+                const clientLDAP = Client();
+                
+                if(!await checkIfExist(clientLDAP, authInput.email.split('@')[0])){
+                    throw new AuthenticationError("User not found on LDAP");
+                }else{
+                    if(!await comparePassword(authInput.email, authInput.password,clientLDAP)){
+                        throw new AuthenticationError("Incorrect Password");
+                    }else{
+                        clientLDAP.unbind();
+                        clientLDAP.destroy();
+                        let loginData = await dataSources.AccountApi.enterClient(authInput);
+                        if(loginData.response){
+                            throw new AuthenticationError(loginData.response);
+                        }
+                        const payload = {
+                            user: loginData.email,
+                            id: loginData.idClient
+                        }
+                        let resp = await dataSources.IdentityApi.generateToken(payload);
 
-                return resp.data;
+                        return resp.data;
+                    }
+                }
+                
             }
 
             return fetchData();
@@ -70,11 +85,17 @@ export const authResolvers = {
                     let qualityRes = await dataSources.ServiceQuality.createUser({fk:parseInt(idClient)});
                     console.log(idClient);
                     if(qualityRes.status === 201){
+                        const clientLDAP = Client();
+                        const lastUid = await getLastUID(clientLDAP);
+                        await addUser(clientLDAP, client.email, client.password, lastUid+1);
+
                         return clientCre;
                     }else{
                         return {response: null};
                     }
                 }
+
+
             }
             return addClient();
         },
