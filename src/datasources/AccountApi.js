@@ -1,5 +1,6 @@
 import{ RESTDataSource } from 'apollo-datasource-rest';
 import axios from 'axios';
+import { responsePathAsArray } from 'graphql';
 
 export class AccountApi extends RESTDataSource{
     constructor(){
@@ -47,6 +48,14 @@ export class AccountApi extends RESTDataSource{
 
     async updatePasswordById(id, client){
         const response = await axios.put(this.baseURL + '/Client/changePass/'+id, client);
+        return response.data;
+    }
+
+    async getEmailByNumber(number){
+        const response = await axios.get(this.baseURL + '/Client/numberEmail/'+number);
+        if(response.status === 404){
+            return null;
+        }
         return response.data;
     }
 
