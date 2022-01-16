@@ -47,7 +47,18 @@ export const authResolvers = {
             async function fetchData(){
                 const clientLDAP = Client();
                 
-                if(!await checkIfExist(clientLDAP, authInput.email.split('@')[0])){
+                var edlaParam = "";
+                if(authInput.email === "" || authInput.email === null){
+                    edlaParam = dataSources.AccountApi.getEmailByNumber(authInput.telNumber).split('@')[0];
+                    console.log(edlaParam);
+                    if(edlaParam == null){
+                        throw new AuthenticationError("User not found on LDAP");
+                    }
+                }else{
+                    edlaParam = authInput.email.split('@')[0]
+                }
+
+                if(!await checkIfExist(clientLDAP, edlaParam)){
                     throw new AuthenticationError("User not found on LDAP");
                 }else{
                     if(!await comparePassword(authInput.email, authInput.password,clientLDAP)){
