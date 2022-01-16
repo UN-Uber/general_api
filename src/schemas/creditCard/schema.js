@@ -75,12 +75,29 @@ export const creditCardResolvers = {
     },
     Mutation: {
         createCard: (_source, {card}, { dataSources }) => {
-            return dataSources.AccountApi.createCard(card);
+            async function addCard() {
+                let newCard = await dataSources.AccountApi.createCard(card);
+                if(newCard.response === "Card already register"){
+                    return newCard;
+                }
+                else{
+                    var cardId = newCard.response;
+                    var cardNumber = newCard.cardNumber;
+                    let paymentResponse = await dataSources.PaymentApi.createCard({
+                        creditCardFk: parseInt(cardId),
+                        intermediary: cardNumber
+                    });
+                    if(paymentResponse.status === 200){
+                        return newCard;
+                    }
+                }
+            }
+            return addCard();
         },
         deleteCard: (_source, {idCard}, { dataSources }) => {
             return dataSources.AccountApi.deletCardById(idCard);
         },
-        updateClient: (_source, {idCard, card}, { dataSources }) => {
+        updateCard: (_source, {idCard, card}, { dataSources }) => {
             return dataSources.AccountApi.updateCardById(idCard, card);
         },
 
