@@ -4,7 +4,7 @@ import axios from "axios";
 export class PaymentApi extends RESTDataSource {
     constructor() {
         super();
-        this.baseURL = "http://35.225.191.230:8000";
+        this.baseURL = "http://34.68.136.52:8000";
     }
 
     // Credit Cards Endpoints
