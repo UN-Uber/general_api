@@ -2,7 +2,7 @@ import ldap from 'ldapjs';
 
 export const client = () => {
 	const client = ldap.createClient({
-        url: ['ldap://35.225.191.230:389'],
+        url: ['ldap://34.68.136.52:389'],
         reconnect: true
     });
     client.bind('cn=admin,dc=unuber,dc=unal,dc=edu,dc=co', 'admin', function (err) {
