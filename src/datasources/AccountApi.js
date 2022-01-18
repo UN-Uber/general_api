@@ -56,7 +56,7 @@ export class AccountApi extends RESTDataSource{
         if(response.status === 404){
             return null;
         }
-        return response.data;
+        return response.data.response;
     }
 
     // Endpoints Account - Cards
