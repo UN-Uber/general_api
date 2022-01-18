@@ -76,19 +76,23 @@ export const creditCardResolvers = {
     Mutation: {
         createCard: (_source, {card}, { dataSources }) => {
             async function addCard() {
-                let newCard = await dataSources.AccountApi.createCard(card);
+                var newCard = await dataSources.AccountApi.createCard(card);
                 if(newCard.response === "Card already register"){
                     return newCard;
                 }
                 else{
                     var cardId = newCard.response;
-                    var cardNumber = newCard.cardNumber;
-                    let paymentResponse = await dataSources.PaymentApi.createCard({
+                    var cardNumber = new String(card.cardNumber).valueOf();
+                    let paymentResponse = await dataSources.PaymentApi.createCreditCard({
                         creditCardFk: parseInt(cardId),
                         intermediary: cardNumber
                     });
-                    if(paymentResponse.status === 200){
+
+                    if(paymentResponse.id != null){
                         return newCard;
+                    }
+                    else{
+                        return {response: "Error"};
                     }
                 }
             }
