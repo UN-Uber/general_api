@@ -21,6 +21,7 @@ export function comparePassword(cn, password, client) {
 					console.log(err);
 					reject(err);
 				} else {
+                    
 					resolve(res);
 				}
 			}
